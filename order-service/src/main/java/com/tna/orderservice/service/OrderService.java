@@ -5,11 +5,13 @@ import com.tna.orderservice.model.Order;
 import com.tna.orderservice.model.OrderItem;
 import com.tna.orderservice.repository.OrderRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -18,7 +20,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public void placeOrder(CreateOrderRequest request){
+    public void placeOrder(CreateOrderRequest request) {
         Order order = new Order().setOrderNumber(UUID.randomUUID().toString());
         List<OrderItem> orderItems = request.getOrderItems().stream().map(OrderItem::of).toList();
         order.setOrderItems(orderItems);
