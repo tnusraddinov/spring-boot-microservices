@@ -27,8 +27,6 @@ public class ProductService {
     }
 
     public List<ProductDto> getProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(ProductDto::of).toList();
+        return productRepository.findAll().stream().map(ProductDto::of).toList();
     }
-
 }
