@@ -1,12 +1,19 @@
 package com.tna.orderservice.service;
 
 import com.tna.orderservice.dto.CreateOrderRequest;
+import com.tna.orderservice.dto.InventoryResponse;
 import com.tna.orderservice.model.Order;
 import com.tna.orderservice.model.OrderItem;
 import com.tna.orderservice.repository.OrderRepository;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClientRequest;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,15 +22,37 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final WebClient webClient;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, WebClient webClient) {
         this.orderRepository = orderRepository;
+        this.webClient = webClient;
     }
 
     public void placeOrder(CreateOrderRequest request) {
         Order order = new Order().setOrderNumber(UUID.randomUUID().toString());
         List<OrderItem> orderItems = request.getOrderItems().stream().map(OrderItem::of).toList();
         order.setOrderItems(orderItems);
-        order = orderRepository.save(order);
+
+        List<String> skuCodes = order.getOrderItems().stream().map(OrderItem::getSkuCode).collect(
+                Collectors.toList());
+
+        InventoryResponse [] inventoryResponses = webClient
+                .get()
+                .uri("http://localhost:8083/api/inventory",
+                        uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build()
+                )
+                .retrieve()
+                .bodyToMono(InventoryResponse[].class)
+                .block();
+
+        boolean allProductsInStock = !Arrays.stream(inventoryResponses).toList().isEmpty() &&
+                Stream.of(inventoryResponses).allMatch(InventoryResponse::isInStock);
+
+        if (allProductsInStock) {
+            order = orderRepository.save(order);
+        } else {
+            throw new IllegalArgumentException("Product is not in stock, please try again later");
+        }
     }
 }
