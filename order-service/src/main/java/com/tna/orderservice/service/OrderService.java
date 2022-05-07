@@ -11,9 +11,7 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClientRequest;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,11 +20,11 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
-    public OrderService(OrderRepository orderRepository, WebClient webClient) {
+    public OrderService(OrderRepository orderRepository, WebClient.Builder webClientBuilder) {
         this.orderRepository = orderRepository;
-        this.webClient = webClient;
+        this.webClientBuilder = webClientBuilder;
     }
 
     public void placeOrder(CreateOrderRequest request) {
@@ -34,12 +32,11 @@ public class OrderService {
         List<OrderItem> orderItems = request.getOrderItems().stream().map(OrderItem::of).toList();
         order.setOrderItems(orderItems);
 
-        List<String> skuCodes = order.getOrderItems().stream().map(OrderItem::getSkuCode).collect(
-                Collectors.toList());
+        List<String> skuCodes = order.getOrderItems().stream().map(OrderItem::getSkuCode).collect(Collectors.toList());
 
-        InventoryResponse [] inventoryResponses = webClient
+        InventoryResponse [] inventoryResponses = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8083/api/inventory",
+                .uri("http://inventory-service/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build()
                 )
                 .retrieve()
