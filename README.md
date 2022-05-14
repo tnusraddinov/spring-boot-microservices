@@ -1,4 +1,5 @@
 # spring-boot-microservices
+    https://www.youtube.com/watch?v=rbKzR6QWKLI
 
 ### Product service
 - http://localhost:8081/
@@ -14,3 +15,9 @@
 
 ### Eureka discovery server
 - http://localhost:8761/
+
+### Keycloak auth server
+    docker run -p 8181:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
+
+### API gateway
+- http://localhost:8084/eureka/web
