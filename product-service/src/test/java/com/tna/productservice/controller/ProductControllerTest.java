@@ -37,11 +37,7 @@ class ProductControllerTest {
 
     @Test
     void whenCreateProductOk_shouldCreateProduct() throws Exception {
-
-        CreateProductRequest request = new CreateProductRequest()
-                .setName("name")
-                .setDescription("desc")
-                .setPrice(BigDecimal.ONE);
+        CreateProductRequest request = new CreateProductRequest("name", "desc", BigDecimal.ONE);
 
         String requestString = objectMapper.writeValueAsString(request);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/product")

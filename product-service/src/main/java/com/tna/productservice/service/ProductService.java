@@ -19,9 +19,9 @@ public class ProductService {
 
     public void createProduct(CreateProductRequest request){
         Product product = new Product()
-                .setName(request.getName())
-                .setDescription(request.getDescription())
-                .setPrice(request.getPrice());
+                .setName(request.name())
+                .setDescription(request.description())
+                .setPrice(request.price());
         product = productRepository.save(product);
         log.debug("product {} - {} saved", product.getId(), product.getName());
     }
