@@ -8,6 +8,7 @@
 ### Order service
 - http://localhost:8082/
 - http://localhost:8082/h2-console
+- http://localhost:8082/actuator/health
 
 ### Inventory service
 - http://localhost:8083/
@@ -17,7 +18,10 @@
 - http://localhost:8761/
 
 ### Keycloak auth server
-    docker run -p 8181:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
+- http://localhost:8181/
 
+```
+docker run -p 8181:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
+```
 ### API gateway
 - http://localhost:8084/eureka/web

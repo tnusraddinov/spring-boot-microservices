@@ -23,7 +23,7 @@ public class ProductService {
                 .setDescription(request.description())
                 .setPrice(request.price());
         product = productRepository.save(product);
-        log.debug("product {} - {} saved", product.getId(), product.getName());
+        log.debug("product {} saved", product);
     }
 
     public List<ProductDto> getProducts() {

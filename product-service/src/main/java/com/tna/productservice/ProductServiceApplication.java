@@ -22,7 +22,7 @@ public class ProductServiceApplication {
 	public CommandLineRunner loadData(ProductRepository productRepository){
 		return args -> {
 			productRepository.saveAll(List.of(
-					new Product().setName("Iphone 13").setDescription("iphone 13").setPrice(BigDecimal.valueOf(1200)),
+					new Product().setName("Iphonee 13").setDescription("iphone 13").setPrice(BigDecimal.valueOf(1200)),
 					new Product().setName("Iphone 13 Red").setDescription("iphone 13 red").setPrice(BigDecimal.valueOf(1000)),
 					new Product().setName("Iphone 12").setDescription("iphone 12").setPrice(BigDecimal.valueOf(1100))
 			));
