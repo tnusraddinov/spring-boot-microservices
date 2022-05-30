@@ -3,6 +3,8 @@ package com.tna.orderservice.controller;
 import com.tna.orderservice.dto.CreateOrderRequest;
 import com.tna.orderservice.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +22,15 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @CircuitBreaker(name="inventory", fallbackMethod = "fallbackMethod")
-    public String placeOrder(@RequestBody CreateOrderRequest request){
-        orderService.placeOrder(request);
-        return "created";
+    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
+    @TimeLimiter(name = "inventory")
+    public CompletableFuture<String> placeOrder(@RequestBody CreateOrderRequest request) {
+        return CompletableFuture.supplyAsync(() -> orderService.placeOrder(request));
     }
 
-    public String fallbackMethod(CreateOrderRequest request, RuntimeException exception) {
+    public CompletableFuture<String> fallbackMethod(CreateOrderRequest request, RuntimeException exception) {
         log.debug(exception.getMessage(), exception);
-        return "Oooops! Something went wrong, please order after some time!!!!";
+        return CompletableFuture.supplyAsync(() -> "Oooops! Something went wrong, please order after some time!!!!");
     }
 
 }
