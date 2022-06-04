@@ -23,5 +23,13 @@
 ```
 docker run -p 8181:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
 ```
+
+### Zipkin distributed tracing server
+- http://localhost:9411/
+
+```
+docker run -d -p 9411:9411 openzipkin/zipkin
+```
+
 ### API gateway
 - http://localhost:8084/eureka/web
