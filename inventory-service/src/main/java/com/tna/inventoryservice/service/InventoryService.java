@@ -22,7 +22,7 @@ public class InventoryService {
     public List<InventoryResponse> isInStock(List<String> skuCodes) {
         log.info("Wait Started");
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
