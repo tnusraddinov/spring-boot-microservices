@@ -1,6 +1,11 @@
 # spring-boot-microservices
     https://www.youtube.com/watch?v=rbKzR6QWKLI
 
+```
+docker-compose -f "docker-compose.yml" up -d
+```
+
+
 ### Product service
 - http://localhost:8081/
 - http://localhost:8081/h2-console
