@@ -69,7 +69,7 @@ services:
     volumes:
       - ./db-data/postgres-order:/data/postgres
     ports:
-      - "5431:5432"
+      - "5433:5432"
     restart: unless-stopped
 
   postgres-inventory:
@@ -83,7 +83,7 @@ services:
     volumes:
       - ./db-data/postgres-inventory:/data/postgres
     ports:
-      - "5432:5432"
+      - "5434:5432"
     restart: unless-stopped
 
   postgres-product:
@@ -97,7 +97,7 @@ services:
     volumes:
       - ./db-data/postgres-product:/data/postgres
     ports:
-      - "5433:5432"
+      - "5435:5432"
     restart: unless-stopped
 
   ## Zipkin
@@ -139,7 +139,7 @@ services:
     image: product-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5433/order-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-product:5435/order-service
     depends_on:
       - postgres-product
       - discovery-server
@@ -151,7 +151,7 @@ services:
     image: order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/order-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5433/order-service
     depends_on:
       - postgres-order
       - broker
@@ -165,7 +165,7 @@ services:
     image: inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inventory-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5434/inventory-service
     depends_on:
       - postgres-inventory
       - discovery-server
