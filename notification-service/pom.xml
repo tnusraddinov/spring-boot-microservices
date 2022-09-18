@@ -73,6 +73,19 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<from>
+						<image>
+							<image>eclipse-temurin:17.0.4.1_1-jre</image>
+						</image>
+					</from>
+					<to><image>${project.artifactId}</image></to>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
